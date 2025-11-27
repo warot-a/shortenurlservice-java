@@ -1,6 +1,6 @@
-package com.warot_a.shorturlservice.repository;
+package com.warota.shorturlservice.repository;
 
-import com.warot_a.shorturlservice.model.ShortUrlEntry;
+import com.warota.shorturlservice.model.ShortUrlEntry;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

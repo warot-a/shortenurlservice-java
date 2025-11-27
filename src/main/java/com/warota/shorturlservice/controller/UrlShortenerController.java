@@ -1,8 +1,8 @@
-package com.warot_a.shorturlservice.controller;
+package com.warota.shorturlservice.controller;
 
-import com.warot_a.shorturlservice.model.ShortenRequest;
-import com.warot_a.shorturlservice.model.ShortenResponse;
-import com.warot_a.shorturlservice.service.UrlShortenerService;
+import com.warota.shorturlservice.model.ShortenRequest;
+import com.warota.shorturlservice.model.ShortenResponse;
+import com.warota.shorturlservice.service.UrlShortenerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

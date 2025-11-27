@@ -1,4 +1,4 @@
-package com.warot_a.shorturlservice.util;
+package com.warota.shorturlservice.util;
 
 public class Base62Encoder {
     private static final String ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

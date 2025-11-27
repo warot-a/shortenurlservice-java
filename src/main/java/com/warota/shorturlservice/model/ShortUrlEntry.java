@@ -1,4 +1,4 @@
-package com.warot_a.shorturlservice.model;
+package com.warota.shorturlservice.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

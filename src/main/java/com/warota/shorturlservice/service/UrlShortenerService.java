@@ -1,8 +1,8 @@
-package com.warot_a.shorturlservice.service;
+package com.warota.shorturlservice.service;
 
-import com.warot_a.shorturlservice.model.ShortUrlEntry;
-import com.warot_a.shorturlservice.repository.ShortUrlRepository;
-import com.warot_a.shorturlservice.util.Base62Encoder;
+import com.warota.shorturlservice.model.ShortUrlEntry;
+import com.warota.shorturlservice.repository.ShortUrlRepository;
+import com.warota.shorturlservice.util.Base62Encoder;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;

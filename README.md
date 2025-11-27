@@ -1,6 +1,6 @@
 # URL Shortener Service
 
-A high-performance URL shortening service built with Spring Boot, PostgreSQL, and Redis caching.
+A high-performance URL Shortening Service built with Spring Boot, PostgreSQL, and Redis caching.
 
 ## Features
 
@@ -246,4 +246,4 @@ This project is a demo application for Spring Boot.
 
 ## Author
 
-warot-a
+[Warot Anusakprasit](https://github.com/warot-a)

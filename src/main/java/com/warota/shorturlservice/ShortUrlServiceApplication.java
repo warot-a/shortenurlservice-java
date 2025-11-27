@@ -1,13 +1,13 @@
-package com.warot_a.shorturlservice;
+package com.warota.shorturlservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ShorturlserviceApplication {
+public class ShortUrlServiceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ShorturlserviceApplication.class, args);
+		SpringApplication.run(ShortUrlServiceApplication.class, args);
 	}
 
 }

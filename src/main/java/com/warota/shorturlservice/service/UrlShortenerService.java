@@ -5,23 +5,25 @@ import com.warota.shorturlservice.repository.ShortUrlRepository;
 import com.warota.shorturlservice.util.Base62Encoder;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.SpringBootVersion;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Service
 public class UrlShortenerService {
     private final ShortUrlRepository repository;
     private final RedisTemplate<String, String> redisTemplate;
-    
+
     @Value("${app.domain.base-url}")
     private String DOMAIN_BASE_URL = "http://localhost:8080";
 
     public UrlShortenerService(ShortUrlRepository repository, RedisTemplate<String, String> redisTemplate) {
         this.repository = repository;
         this.redisTemplate = redisTemplate;
-        
+
     }
 
     @Transactional
@@ -74,6 +76,15 @@ public class UrlShortenerService {
             return foundLongUrl;
         }
         return null;
+    }
+
+    public Map<String, String> getRuntimeVersions() {
+        var javaVersion = System.getProperty("java.version");
+        var springBootVersion = SpringBootVersion.getVersion();
+        if (javaVersion == null) {
+            javaVersion = "unknown";
+        }
+        return java.util.Map.of("java", javaVersion, "springBoot", springBootVersion);
     }
 
     private String getShortCodeKey(String shortCode) {

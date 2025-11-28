@@ -7,9 +7,9 @@ A high-performance URL Shortening Service built with Spring Boot, PostgreSQL, an
 - 🔗 **URL Shortening**: Convert long URLs into short, shareable links
 - ⚡ **Redis Caching**: Fast lookups with 7-day cache expiration
 - 🔄 **Automatic Redirects**: 301 permanent redirects for SEO optimization
-- 🎯 **Base62 Encoding**: Generates short, readable codes
+- 🎯 **Random Generation**: Generates secure, fixed-length 6-character codes
 - 💾 **PostgreSQL Storage**: Persistent storage for URL mappings
-- 🏥 **Health Check**: Built-in health endpoint
+- 🏥 **Health Check**: Built-in health endpoint with version info
 
 ## Tech Stack
 
@@ -79,7 +79,7 @@ GET /health
 **Response:**
 ```json
 {
-  "success": true,
+  "healthy": true,
   "java": "25.0.1",
   "springBoot": "3.5.8"
 }
@@ -106,10 +106,12 @@ Content-Type: application/json
 ### Redirect to Original URL
 
 ```http
-GET /d/{shortCode}
+GET /{shortCode}
 ```
 
 Redirects (301 Permanent) to the original long URL.
+
+**Note**: Short codes are exactly 6 characters long (e.g., `aB3xYz`).
 
 ## How It Works
 
@@ -117,7 +119,8 @@ Redirects (301 Permanent) to the original long URL.
    - Receives a long URL via POST request
    - Checks Redis cache for existing mapping
    - If not cached, checks PostgreSQL database
-   - If new URL, generates unique short code using Base62 encoding
+   - If new URL, generates unique 6-character random code using SecureRandom
+   - Implements collision detection and retry (up to 10 attempts)
    - Stores mapping in database and caches in Redis (7-day TTL)
 
 2. **URL Resolution**:
@@ -189,7 +192,7 @@ src/
 │   │   ├── service/
 │   │   │   └── UrlShortenerService.java       # Business logic
 │   │   └── util/
-│   │       └── Base62Encoder.java             # URL encoding
+│   │       └── ShortCodeGenerator.java        # Random code generation
 │   └── resources/
 │       └── application.properties              # Configuration
 └── test/

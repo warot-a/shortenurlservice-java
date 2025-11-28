@@ -20,7 +20,7 @@ public class ShortUrlEntry {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "short_code", length = 10, unique = true)
+    @Column(name = "short_code", length = 6, unique = true)
     private String shortCode;
 
     @Column(name = "long_url", unique = true, nullable = false, length = 2048)

@@ -40,7 +40,7 @@ public class UrlShortenerController {
         }
     }
 
-    @GetMapping("/d/{shortCode}")
+    @GetMapping("/{shortCode}")
     public RedirectView redirect(@PathVariable String shortCode) {
         String longUrl = service.getLongUrlAndCache(shortCode);
 

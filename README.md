@@ -14,17 +14,17 @@ A high-performance URL Shortening Service built with Spring Boot, PostgreSQL, an
 ## Tech Stack
 
 - **Framework**: Spring Boot 3.5.8
-- **Language**: Java 17
-- **Database**: PostgreSQL 17
+- **Language**: Java 25
+- **Database**: PostgreSQL 17 (Production), H2 (Testing)
 - **Cache**: Redis 8
 - **Build Tool**: Maven
 - **Containerization**: Docker Compose
 
 ## Prerequisites
 
-- Java 17 or higher
+- Java 25 or higher
 - Maven 3.6+
-- Docker and Docker Compose
+- Docker and Docker Compose (optional for tests - H2 is used)
 
 ## Getting Started
 
@@ -79,7 +79,9 @@ GET /health
 **Response:**
 ```json
 {
-  "success": true
+  "success": true,
+  "java": "25.0.1",
+  "springBoot": "3.5.8"
 }
 ```
 
@@ -104,7 +106,7 @@ Content-Type: application/json
 ### Redirect to Original URL
 
 ```http
-GET /{shortCode}
+GET /d/{shortCode}
 ```
 
 Redirects (301 Permanent) to the original long URL.
@@ -175,7 +177,7 @@ app.domain.base-url=http://localhost
 ```
 src/
 ├── main/
-│   ├── java/com/warot_a/shorturlservice/
+│   ├── java/com/warota/shorturlservice/
 │   │   ├── controller/
 │   │   │   └── UrlShortenerController.java    # REST endpoints
 │   │   ├── model/
@@ -191,16 +193,26 @@ src/
 │   └── resources/
 │       └── application.properties              # Configuration
 └── test/
-    └── java/com/warot_a/shorturlservice/
-        └── ShorturlserviceApplicationTests.java
+    ├── java/com/warota/shorturlservice/
+    │   └── ShortUrlServiceApplicationTests.java
+    └── resources/
+        └── application.properties              # Test configuration (H2)
 ```
 
 ## Testing
+
+Tests use H2 in-memory database and don't require Docker containers to be running.
 
 Run tests with:
 
 ```bash
 mvn test
+```
+
+Or build with tests:
+
+```bash
+mvn clean install
 ```
 
 ## Deployment

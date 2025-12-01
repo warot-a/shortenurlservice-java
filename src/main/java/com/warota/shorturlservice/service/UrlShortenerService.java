@@ -2,7 +2,7 @@ package com.warota.shorturlservice.service;
 
 import com.warota.shorturlservice.model.ShortUrlEntry;
 import com.warota.shorturlservice.repository.ShortUrlRepository;
-import com.warota.shorturlservice.util.Base62Encoder;
+import com.warota.shorturlservice.util.ShortCodeGenerator;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringBootVersion;
@@ -48,12 +48,22 @@ public class UrlShortenerService {
             return "%s/%s".formatted(DOMAIN_BASE_URL, existingEntry.getShortCode());
         }
 
-        // Generate new short code
+        // Generate new short code with collision retry
+        String newShortCode;
+        int maxRetries = 10;
+        int attempts = 0;
+        
+        do {
+            newShortCode = ShortCodeGenerator.generate();
+            attempts++;
+            
+            if (attempts > maxRetries) {
+                throw new Exception("Failed to generate unique short code after " + maxRetries + " attempts");
+            }
+        } while (repository.findByShortCode(newShortCode).isPresent());
+        
         var newEntry = new ShortUrlEntry();
-        newEntry.setLongUrl(longUrl);
-        newEntry = repository.save(newEntry);
-
-        var newShortCode = Base62Encoder.encode(newEntry.getId());
+        newEntry.setLongUrl(normalizedUrl);
         newEntry.setShortCode(newShortCode);
         repository.save(newEntry);
 

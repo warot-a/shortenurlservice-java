@@ -1,5 +1,6 @@
 package com.warota.shorturlservice.controller;
 
+import com.warota.shorturlservice.exception.ShortCodeGenerationException;
 import com.warota.shorturlservice.model.ShortenRequest;
 import com.warota.shorturlservice.model.ShortenResponse;
 import com.warota.shorturlservice.service.UrlShortenerService;
@@ -35,16 +36,16 @@ public class UrlShortenerController {
         try {
             String shortUrl = service.shortenUrl(request.longUrl());
             return ResponseEntity.status(HttpStatus.CREATED).body(new ShortenResponse(shortUrl));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch (ShortCodeGenerationException e) {
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
         }
     }
 
-    @GetMapping("/d/{shortCode}")
+    @GetMapping("/{shortCode}")
     public RedirectView redirect(@PathVariable String shortCode) {
         String longUrl = service.getLongUrlAndCache(shortCode);
 
-        if (!longUrl.isEmpty()) {
+        if (longUrl != null && !longUrl.isEmpty()) {
             RedirectView redirectView = new RedirectView(longUrl);
             redirectView.setStatusCode(HttpStatus.MOVED_PERMANENTLY);
             return redirectView;

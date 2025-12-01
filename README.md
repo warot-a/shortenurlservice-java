@@ -7,14 +7,14 @@ A high-performance URL Shortening Service built with Spring Boot, PostgreSQL, an
 - 🔗 **URL Shortening**: Convert long URLs into short, shareable links
 - ⚡ **Redis Caching**: Fast lookups with 7-day cache expiration
 - 🔄 **Automatic Redirects**: 301 permanent redirects for SEO optimization
-- 🎯 **Base62 Encoding**: Generates short, readable codes
+- 🎯 **Random Short Code Generation**: Generates secure, random 6-character codes
 - 💾 **PostgreSQL Storage**: Persistent storage for URL mappings
 - 🏥 **Health Check**: Built-in health endpoint
 
 ## Tech Stack
 
 - **Framework**: Spring Boot 3.5.8
-- **Language**: Java 25
+- **Language**: Java 17+
 - **Database**: PostgreSQL 17 (Production), H2 (Testing)
 - **Cache**: Redis 8
 - **Build Tool**: Maven
@@ -22,7 +22,7 @@ A high-performance URL Shortening Service built with Spring Boot, PostgreSQL, an
 
 ## Prerequisites
 
-- Java 25 or higher
+- Java 17 or higher
 - Maven 3.6+
 - Docker and Docker Compose (optional for tests - H2 is used)
 
@@ -79,8 +79,8 @@ GET /health
 **Response:**
 ```json
 {
-  "success": true,
-  "java": "25.0.1",
+  "healthy": true,
+  "java": "17.0.1",
   "springBoot": "3.5.8"
 }
 ```
@@ -99,14 +99,14 @@ Content-Type: application/json
 **Response:**
 ```json
 {
-  "shortUrl": "http://localhost:8080/aB3xY"
+  "shortUrl": "http://localhost:8080/aB3xY2"
 }
 ```
 
 ### Redirect to Original URL
 
 ```http
-GET /d/{shortCode}
+GET /{shortCode}
 ```
 
 Redirects (301 Permanent) to the original long URL.
@@ -117,7 +117,7 @@ Redirects (301 Permanent) to the original long URL.
    - Receives a long URL via POST request
    - Checks Redis cache for existing mapping
    - If not cached, checks PostgreSQL database
-   - If new URL, generates unique short code using Base62 encoding
+   - If new URL, generates unique 6-character short code using secure random generation
    - Stores mapping in database and caches in Redis (7-day TTL)
 
 2. **URL Resolution**:
@@ -180,6 +180,8 @@ src/
 │   ├── java/com/warota/shorturlservice/
 │   │   ├── controller/
 │   │   │   └── UrlShortenerController.java    # REST endpoints
+│   │   ├── exception/
+│   │   │   └── ShortCodeGenerationException.java  # Custom exception
 │   │   ├── model/
 │   │   │   ├── ShortenRequest.java            # Request DTO
 │   │   │   ├── ShortenResponse.java           # Response DTO
@@ -189,7 +191,7 @@ src/
 │   │   ├── service/
 │   │   │   └── UrlShortenerService.java       # Business logic
 │   │   └── util/
-│   │       └── Base62Encoder.java             # URL encoding
+│   │       └── ShortCodeGenerator.java        # Short code generation
 │   └── resources/
 │       └── application.properties              # Configuration
 └── test/

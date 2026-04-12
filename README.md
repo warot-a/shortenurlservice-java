@@ -28,6 +28,35 @@ A high-performance URL Shortening Service built with Spring Boot, PostgreSQL, an
 
 ## Getting Started
 
+### 0. Install Java 25
+
+This project requires Java 25. On Ubuntu/Debian, you can install it using:
+
+```bash
+sudo apt update
+sudo apt install openjdk-25-jdk
+```
+
+Verify the installation:
+
+```bash
+java -version
+```
+
+If you have multiple Java versions, set Java 25 as the default:
+
+```bash
+sudo update-alternatives --config java
+```
+
+After installation, you may need to set the `JAVA_HOME` environment variable. To make it persistent for Bash users, add it to your `~/.bashrc`:
+
+```bash
+echo 'export JAVA_HOME=/usr/lib/jvm/java-25-openjdk-amd64' >> ~/.bashrc
+echo 'export PATH=$JAVA_HOME/bin:$PATH' >> ~/.bashrc
+source ~/.bashrc
+```
+
 ### 1. Clone the Repository
 
 ```bash
@@ -53,7 +82,7 @@ Edit `src/main/resources/application.properties` if needed:
 
 ```properties
 # Domain base URL (override with environment variable APP_DOMAIN_BASE_URL)
-app.domain.base-url=http://localhost
+app.domain.base-url=http://localhost:8080
 ```
 
 ### 4. Build and Run

@@ -99,6 +99,14 @@ The application will start on `http://localhost:8080` (default Spring Boot port)
 
 ## API Endpoints
 
+## API Documentation
+ 
+You can access the interactive API documentation (Swagger UI) at:
+
+```http
+GET /swagger-ui.html
+```
+
 ### Health Check
 
 ```http

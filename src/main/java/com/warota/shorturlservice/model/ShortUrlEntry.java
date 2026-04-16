@@ -1,15 +1,16 @@
 package com.warota.shorturlservice.model;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "urls")
+@Document(collection = "urls")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,15 +18,13 @@ import java.time.LocalDateTime;
 public class ShortUrlEntry {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
-    @Column(name = "short_code", length = 6, unique = true)
+    @Indexed(unique = true)
     private String shortCode;
 
-    @Column(name = "long_url", unique = true, nullable = false, length = 2048)
+    @Indexed(unique = true)
     private String longUrl;
 
-    @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 }

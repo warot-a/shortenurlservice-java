@@ -3,7 +3,7 @@ package com.warota.shorturlservice.service;
 import com.warota.shorturlservice.model.ShortUrlEntry;
 import com.warota.shorturlservice.repository.ShortUrlRepository;
 import com.warota.shorturlservice.util.ShortCodeGenerator;
-import jakarta.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringBootVersion;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -26,7 +26,6 @@ public class UrlShortenerService {
 
     }
 
-    @Transactional
     public String shortenUrl(String longUrl) throws Exception {
         var normalizedUrl = longUrl.trim().replaceAll("/$", "");
 

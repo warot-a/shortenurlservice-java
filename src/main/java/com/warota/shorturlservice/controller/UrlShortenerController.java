@@ -23,10 +23,9 @@ public class UrlShortenerController {
     public ResponseEntity<Map<String, Object>> health() {
         var versions = service.getRuntimeVersions();
         Map<String, Object> response = Map.of(
-            "healthy", true,
-            "java", versions.get("java"),
-            "springBoot", versions.get("springBoot")
-        );
+                "healthy", true,
+                "java", versions.get("java"),
+                "springBoot", versions.get("springBoot"));
         return ResponseEntity.ok(response);
     }
 

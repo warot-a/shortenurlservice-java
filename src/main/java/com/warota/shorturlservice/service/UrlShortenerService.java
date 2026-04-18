@@ -23,7 +23,6 @@ public class UrlShortenerService {
     public UrlShortenerService(ShortUrlRepository repository, RedisTemplate<String, String> redisTemplate) {
         this.repository = repository;
         this.redisTemplate = redisTemplate;
-
     }
 
     public String shortenUrl(String longUrl) throws Exception {
@@ -41,8 +40,10 @@ public class UrlShortenerService {
             var existingEntry = existingEntryOpt.get();
 
             // Save to cache
-            redisTemplate.opsForValue().set(getLongUrlKey(normalizedUrl), existingEntry.getShortCode(), 7, TimeUnit.DAYS);
-            redisTemplate.opsForValue().set(getShortCodeKey(existingEntry.getShortCode()), normalizedUrl, 7, TimeUnit.DAYS);
+            redisTemplate.opsForValue().set(getLongUrlKey(normalizedUrl), existingEntry.getShortCode(), 7,
+                    TimeUnit.DAYS);
+            redisTemplate.opsForValue().set(getShortCodeKey(existingEntry.getShortCode()), normalizedUrl, 7,
+                    TimeUnit.DAYS);
 
             return "%s/%s".formatted(DOMAIN_BASE_URL, existingEntry.getShortCode());
         }
@@ -51,16 +52,16 @@ public class UrlShortenerService {
         String newShortCode;
         int maxRetries = 10;
         int attempts = 0;
-        
+
         do {
             newShortCode = ShortCodeGenerator.generate();
             attempts++;
-            
+
             if (attempts > maxRetries) {
                 throw new Exception("Failed to generate unique short code after " + maxRetries + " attempts");
             }
         } while (repository.findByShortCode(newShortCode).isPresent());
-        
+
         var newEntry = new ShortUrlEntry();
         newEntry.setLongUrl(normalizedUrl);
         newEntry.setShortCode(newShortCode);

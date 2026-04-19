@@ -25,7 +25,7 @@ public class UrlShortenerService {
         this.redisTemplate = redisTemplate;
     }
 
-    public String shortenUrl(String longUrl) throws Exception {
+    public String shortenUrl(String longUrl) {
         var normalizedUrl = longUrl.trim().replaceAll("/$", "");
 
         // Lookup from cache
@@ -58,7 +58,7 @@ public class UrlShortenerService {
             attempts++;
 
             if (attempts > maxRetries) {
-                throw new Exception("Failed to generate unique short code after " + maxRetries + " attempts");
+                throw new RuntimeException("Failed to generate unique short code after " + maxRetries + " attempts");
             }
         } while (repository.findByShortCode(newShortCode).isPresent());
 

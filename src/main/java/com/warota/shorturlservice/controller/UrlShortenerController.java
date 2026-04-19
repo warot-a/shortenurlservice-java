@@ -11,6 +11,8 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.Map;
 
+import jakarta.validation.Valid;
+
 @RestController
 public class UrlShortenerController {
     private final UrlShortenerService service;
@@ -30,13 +32,9 @@ public class UrlShortenerController {
     }
 
     @PostMapping("/shorten")
-    public ResponseEntity<ShortenResponse> shorten(@RequestBody ShortenRequest request) {
-        try {
-            String shortUrl = service.shortenUrl(request.longUrl());
-            return ResponseEntity.status(HttpStatus.CREATED).body(new ShortenResponse(shortUrl));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+    public ResponseEntity<ShortenResponse> shorten(@Valid @RequestBody ShortenRequest request) {
+        String shortUrl = service.shortenUrl(request.longUrl());
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ShortenResponse(shortUrl));
     }
 
     @GetMapping("/{shortCode:[a-zA-Z0-9]{6}}")

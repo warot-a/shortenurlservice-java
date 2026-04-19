@@ -45,7 +45,7 @@ public class UrlShortenerController {
 
         if (!longUrl.isEmpty()) {
             RedirectView redirectView = new RedirectView(longUrl);
-            redirectView.setStatusCode(HttpStatus.MOVED_PERMANENTLY);
+            redirectView.setStatusCode(HttpStatus.FOUND);
             return redirectView;
         }
 

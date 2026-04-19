@@ -8,14 +8,14 @@ A high-performance URL Shortening Service built with Spring Boot, PostgreSQL, an
 - ⚡ **Redis Caching**: Fast lookups with 7-day cache expiration
 - 🔄 **Automatic Redirects**: 301 permanent redirects for SEO optimization
 - 🎯 **Random Generation**: Generates secure, fixed-length 6-character codes
-- 💾 **PostgreSQL Storage**: Persistent storage for URL mappings
+- 💾 **MongoDB Storage**: Scalable NoSQL storage for URL mappings
 - 🏥 **Health Check**: Built-in health endpoint with version info
 
 ## Tech Stack
 
 - **Framework**: Spring Boot 3.5.8
 - **Language**: Java 25
-- **Database**: PostgreSQL 17 (Production), H2 (Testing)
+- **Database**: MongoDB 8
 - **Cache**: Redis 8
 - **Build Tool**: Maven
 - **Containerization**: Docker Compose
@@ -66,15 +66,16 @@ cd shorturlservice
 
 ### 2. Start Dependencies
 
-Start PostgreSQL and Redis using Docker Compose:
+Start MongoDB and Redis using Docker Compose:
 
 ```bash
 docker-compose up -d
 ```
 
 This will start:
-- PostgreSQL on port `15432`
+- MongoDB on port `27017`
 - Redis on port `16379`
+- Mongo Express on port `8081`
 
 ### 3. Configure Application
 
@@ -96,6 +97,22 @@ mvn spring-boot:run
 ```
 
 The application will start on `http://localhost:8080` (default Spring Boot port).
+
+#### Development Mode (Enable Swagger & Logging)
+To use the configuration from `application-dev.properties`, run with:
+```bash
+mvn spring-boot:run -Dspring-boot.run.profiles=dev
+# OR
+SPRING_PROFILES_ACTIVE=dev mvn spring-boot:run
+```
+
+## Interactive Tools
+
+| Tool | URL | Credentials |
+|------|-----|-------------|
+| **Swagger UI** | `http://localhost:8080/swagger-ui.html` | - |
+| **Mongo Express** | `http://localhost:8081` | `express` / `password1234` |
+
 
 ## API Endpoints
 
@@ -155,7 +172,7 @@ Redirects (301 Permanent) to the original long URL.
 1. **URL Shortening**:
    - Receives a long URL via POST request
    - Checks Redis cache for existing mapping
-   - If not cached, checks PostgreSQL database
+   - If not cached, checks MongoDB database
    - If new URL, generates unique 6-character random code using SecureRandom
    - Implements collision detection and retry (up to 10 attempts)
    - Stores mapping in database and caches in Redis (7-day TTL)
@@ -163,7 +180,7 @@ Redirects (301 Permanent) to the original long URL.
 2. **URL Resolution**:
    - Receives short code via GET request
    - Checks Redis cache first
-   - Falls back to PostgreSQL if not in cache
+   - Falls back to MongoDB if not in cache
    - Returns 301 redirect to original URL
    - Returns 404 if short code not found
 
@@ -177,10 +194,8 @@ Override configuration using environment variables:
 # Domain base URL
 export APP_DOMAIN_BASE_URL=https://warot-a.dev
 
-# Database
-export SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:15432/short_url_db
-export SPRING_DATASOURCE_USERNAME=user
-export SPRING_DATASOURCE_PASSWORD=password
+# MongoDB
+export MONGODB_URI=mongodb://admin:password1234@localhost:27017/short_url_db?authSource=admin
 
 # Redis
 export SPRING_DATA_REDIS_HOST=localhost
@@ -195,21 +210,15 @@ Key configuration in `application.properties`:
 # Application
 spring.application.name=shorturlservice
 
-# PostgreSQL
-spring.datasource.url=jdbc:postgresql://localhost:15432/short_url_db
-spring.datasource.username=user
-spring.datasource.password=password
+# MongoDB Settings
+spring.data.mongodb.uri=${MONGODB_URI:mongodb://admin:password1234@localhost:27017/short_url_db?authSource=admin}
 
-# JPA
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-
-# Redis
+# Redis Settings
 spring.data.redis.host=localhost
 spring.data.redis.port=16379
 
-# URL Shortener
-app.domain.base-url=http://localhost
+# URL Shortener Settings
+app.domain.base-url=http://localhost:8080
 ```
 
 ## Project Structure

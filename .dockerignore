@@ -1,0 +1,13 @@
+target/
+!.jar
+.mvn/wrapper/maven-wrapper.jar
+.git/
+.gitignore
+.env
+Dockerfile
+docker-compose.yml
+HELP.md
+mvwn
+mvnw.cmd
+.agents/
+INTERVIEW_PREP.md

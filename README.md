@@ -98,6 +98,31 @@ mvn spring-boot:run
 
 The application will start on `http://localhost:8080` (default Spring Boot port).
 
+## Running with Docker
+
+You can run the entire stack (Application, MongoDB, and Redis) using Docker.
+
+### 1. Build the Application Image
+We recommend using the `--pull` and `--no-cache` flags to ensure you are using the latest base images and performing a completely fresh build:
+
+```bash
+docker build --pull --no-cache -t shorturl-service .
+```
+
+### 2. Run the Full Stack with Docker Compose
+You can build and start the application along with its dependencies (MongoDB & Redis) using a single command:
+
+```bash
+docker-compose up -d --build
+```
+
+The `--build` flag ensures that the application image is rebuilt with your latest code changes.
+
+### 3. Access the Services
+- **Application**: `http://localhost:8080`
+- **Swagger UI**: `http://localhost:8080/swagger-ui/index.html`
+- **Mongo Express**: `http://localhost:8081`
+
 #### Development Mode (Enable Swagger & Logging)
 To use the configuration from `application-dev.properties`, run with:
 ```bash
